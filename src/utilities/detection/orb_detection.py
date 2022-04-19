@@ -5,8 +5,6 @@ from scipy.ndimage.filters import maximum_filter
 detector = cv2.ORB_create()
 detector.setPatchSize(75)
 detector.setMaxFeatures(10000)
-# detector.setScoreType(0)
-
 
 def get_key_points(img):
     key_pts = detector.detect(img)

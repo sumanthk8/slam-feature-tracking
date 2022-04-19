@@ -98,7 +98,7 @@ def get_homography_match_inliers(pts1, pts2, matches, homography, threshold=3):
     return inlier_matches
 
 
-def ransac_fundamental(pts1, pts2, matches, num_iterations=500):
+def ransac_fundamental(pts1, pts2, matches, num_iterations=150):
     best_F = None
     inlier_matches = None
 
@@ -119,7 +119,7 @@ def ransac_fundamental(pts1, pts2, matches, num_iterations=500):
         if F is None:
             continue
 
-        curr_inliers = get_fundamental_match_inliers(pts1, pts2, matches, F, 5)
+        curr_inliers = get_fundamental_match_inliers(pts1, pts2, matches, F, 3)
 
         if inlier_matches is None or len(curr_inliers) > len(inlier_matches):
             best_F = F
@@ -138,8 +138,8 @@ def get_fundamental_match_inliers(pts1, pts2, matches, F, threshold=3):
 
     errors = get_fundamental_errors(pts1, pts2, matches, F)
 
-    for i in range(len(errors)):
-        if abs(errors[i, 0]) < threshold and abs(errors[i, 1]) < threshold:
+    for i in range(len(errors)//2):
+        if abs(errors[2*i]) < threshold and abs(errors[2*i+1]) < threshold:
             inlier_matches = np.append(inlier_matches, [matches[i]], axis=0)
 
     return inlier_matches
